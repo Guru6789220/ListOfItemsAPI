@@ -14,14 +14,15 @@ namespace ListOfItems.DataAccess
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ItemList>().HasOne(u=>u.Category)
                 .WithMany()
-                .HasForeignKey(u=>u.CategoryID)
+                .HasForeignKey(u=>u.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<ItemList>().HasOne(u=>u.SubCategory)
+            modelBuilder.Entity<ItemList>().HasOne(u=>u.subCategory)
                 .WithMany()
                 .HasForeignKey(u=>u.SubCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+          
         }
-
+        
         public DbSet<Category> Category_Master { get; set; }
         public DbSet<SubCategory> SubCategory_Master { get; set; }
 
