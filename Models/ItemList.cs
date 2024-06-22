@@ -12,11 +12,11 @@ namespace ListOfItems.Models
         [Required]
         [ForeignKey("CategoryId")]
         public int CategoryId { get; set; }
-        public virtual Category Category { get; set; }
+       
         [Required]
         [ForeignKey("SubCategoryId")]
         public int SubCategoryId { get; set; }
-        public virtual SubCategory SubCategory { get; set;}
+       
         [Required]
         public string? ItemName { get; set; }
 
@@ -29,7 +29,14 @@ namespace ListOfItems.Models
 
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-
+        [NotMapped]
+        public string? CategoryName {  get; set; }
+        [NotMapped]
+        public string? SubCategoryName { get; set; }
+        
+        public Category Category { get; set; }
+       
+        public SubCategory subCategory { get; set; }
 
     }
 }
