@@ -1,5 +1,6 @@
 ﻿using ListOfItems.DataAccess;
 using ListOfItems.Models;
+using ListOfItems.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +26,9 @@ namespace ListOfItems.Controllers
                       {
                           ItemId = item.ItemId,
                           CategoryId = item.Category.CategoryId,
-                          CategoryName = item.Category.CategoryName,
+                          
                           SubCategoryId = item.subCategory.SubCategoryId,
-                          SubCategoryName = item.subCategory.SubCategoryName,
+                         
                           ItemName = item.ItemName,
                           ItemDesc = item.ItemDesc,
                           Price = item.Price,
@@ -71,9 +72,9 @@ namespace ListOfItems.Controllers
                           {
                               ItemId = item.ItemId,
                               CategoryId = item.Category.CategoryId,
-                              CategoryName = item.Category.CategoryName,
+                             
                               SubCategoryId = item.subCategory.SubCategoryId,
-                              SubCategoryName = item.subCategory.SubCategoryName,
+                              
                               ItemName = item.ItemName,
                               ItemDesc = item.ItemDesc,
                               Price = item.Price,
@@ -96,7 +97,7 @@ namespace ListOfItems.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ItemList> Create([FromBody] ItemList itemdata) 
+        public ActionResult<ItemListDTO> Create([FromBody] ItemListDTO itemdata) 
         {
             try
             {
@@ -106,17 +107,17 @@ namespace ListOfItems.Controllers
                 }
                 else
                 {
-                    if (itemdata.Category != null && itemdata.Category.CategoryId > 0)
+                    ItemList item = new ItemList
                     {
-                        db.Entry(itemdata.Category).State = EntityState.Unchanged;
-                    }
+                        CategoryId = itemdata.CategoryId,
+                        SubCategoryId = itemdata.SubCategoryId,
+                        ItemName = itemdata.ItemName,
+                        ItemDesc = itemdata.ItemDesc,
+                        Price = itemdata.Price,
+                        Discount = itemdata.Discount
+                    };
 
-                    if (itemdata.subCategory != null && itemdata.subCategory.SubCategoryId > 0)
-                    {
-                        db.Entry(itemdata.subCategory).State = EntityState.Unchanged;
-                    } 
-
-                    db.ItemMaster.Add(itemdata);
+                    db.ItemMaster.Add(item);
                     db.SaveChanges();
                     return Ok();
                 }

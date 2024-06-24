@@ -29,10 +29,6 @@ namespace ListOfItems.Models
 
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        [NotMapped]
-        public string? CategoryName {  get; set; }
-        [NotMapped]
-        public string? SubCategoryName { get; set; }
         
         public Category Category { get; set; }
        
