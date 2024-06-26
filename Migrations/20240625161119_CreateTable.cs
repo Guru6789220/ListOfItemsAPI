@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ListOfItems.Migrations
 {
     /// <inheritdoc />
-    public partial class createTables_ItemLists_Category_SubCategory : Migration
+    public partial class CreateTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ListOfItems.Migrations
 {
     [DbContext(typeof(DBConnect))]
-    [Migration("20240620162129_createTables_ItemLists_Category_SubCategory")]
-    partial class createTables_ItemLists_Category_SubCategory
+    [Migration("20240625161119_CreateTable")]
+    partial class CreateTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,7 +126,7 @@ namespace ListOfItems.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ListOfItems.Models.SubCategory", "SubCategory")
+                    b.HasOne("ListOfItems.Models.SubCategory", "subCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -134,7 +134,7 @@ namespace ListOfItems.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("SubCategory");
+                    b.Navigation("subCategory");
                 });
 
             modelBuilder.Entity("ListOfItems.Models.SubCategory", b =>

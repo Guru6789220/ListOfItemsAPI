@@ -123,7 +123,7 @@ namespace ListOfItems.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ListOfItems.Models.SubCategory", "SubCategory")
+                    b.HasOne("ListOfItems.Models.SubCategory", "subCategory")
                         .WithMany()
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -131,7 +131,7 @@ namespace ListOfItems.Migrations
 
                     b.Navigation("Category");
 
-                    b.Navigation("SubCategory");
+                    b.Navigation("subCategory");
                 });
 
             modelBuilder.Entity("ListOfItems.Models.SubCategory", b =>

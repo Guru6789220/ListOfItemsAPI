@@ -12,6 +12,7 @@ namespace ListOfItems.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ItemList>().HasOne(u=>u.Category)
                 .WithMany()
                 .HasForeignKey(u=>u.CategoryId)
