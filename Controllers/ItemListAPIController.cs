@@ -1,7 +1,9 @@
 ﻿using ListOfItems.DataAccess;
 using ListOfItems.Models;
 using ListOfItems.Models.DTO;
+using ListOfItems.Services.IServices;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
@@ -13,55 +15,20 @@ namespace ListOfItems.Controllers
     public class ItemListAPIController : ControllerBase
     {
         public readonly DBConnect db;
-        public ItemListAPIController(DBConnect db)
+        private readonly IItemRepository itemRepository;
+        public ItemListAPIController(IItemRepository ItemReop)
         {
-            this.db = db;
+            
+            itemRepository = ItemReop;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<ItemList>> get()
+        public async Task<List<ItemListDTO>> Get()
         {
-
-            var res = db.ItemMaster.Include(c => c.Category).Include(s => s.subCategory)
-                      .Select(item => new ItemList
-                      {
-                          ItemId = item.ItemId,
-                          CategoryId = item.Category.CategoryId,
-                          
-                          SubCategoryId = item.subCategory.SubCategoryId,
-                         
-                          ItemName = item.ItemName,
-                          ItemDesc = item.ItemDesc,
-                          Price = item.Price,
-                          Discount = item.Discount
-                      }).ToList();
-
-            //var res1 = (from item in db.ItemMaster
-            //           join c in db.Category_Master
-            //           on item.CategoryId equals c.CategoryId
-            //           join s in db.SubCategory_Master
-            //           on item.SubCategoryId equals s.SubCategoryId
-            //           select (new ItemList 
-            //           {
-            //               ItemId = item.ItemId,
-            //               CategoryId = c.CategoryId,
-            //               CategoryName = c.CategoryName,
-            //               SubCategoryId = s.SubCategoryId,
-            //               SubCategoryName = s.SubCategoryName,
-            //               ItemName = item.ItemName,
-            //               ItemDesc = item.ItemDesc,
-            //               Price = item.Price,
-            //               Discount = item.Discount
-            //           })).ToList();
-            if (res == null || res.Count<=0)
-            {
-                return NoContent();
-            }
-            else
-            {
-                return Ok(res.ToList());
-            }
+            var res= await Task.FromResult(itemRepository.getall());
+            return res;
 
         }
+     
         [HttpGet("{id:int}")]
         public ActionResult<ItemList> Get(int id)
         {

@@ -1,4 +1,6 @@
 using ListOfItems.DataAccess;
+using ListOfItems.Services;
+using ListOfItems.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DBConnect>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("ConnString")));
-
+builder.Services.AddScoped<IItemRepository, ItemListRepository>();
 
 var app = builder.Build();
 
