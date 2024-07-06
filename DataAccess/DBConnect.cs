@@ -21,6 +21,11 @@ namespace ListOfItems.DataAccess
                 .WithMany()
                 .HasForeignKey(u=>u.SubCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserDetails>().HasOne(r => r.Roles)
+                .WithMany()
+                .HasForeignKey(f => f.ConsumerType)
+                .OnDelete(DeleteBehavior.Restrict);
           
         }
         
@@ -28,5 +33,9 @@ namespace ListOfItems.DataAccess
         public DbSet<SubCategory> SubCategory_Master { get; set; }
 
         public DbSet<ItemList> ItemMaster { get; set; }
+
+        public DbSet<Roles> Roles_Master { get; set;}
+
+        public DbSet<UserDetails> UserDetails { get; set; }
     }
 }

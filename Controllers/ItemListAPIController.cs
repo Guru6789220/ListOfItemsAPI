@@ -14,7 +14,7 @@ namespace ListOfItems.Controllers
     [ApiController]
     public class ItemListAPIController : ControllerBase
     {
-        public readonly DBConnect db;
+       
         private readonly IItemRepository itemRepository;
         public ItemListAPIController(IItemRepository ItemReop)
         {
@@ -34,21 +34,9 @@ namespace ListOfItems.Controllers
         {
             try
             {
-                var ress = db.ItemMaster.Include(C => C.Category).Include(S => S.subCategory).Where(u=>u.ItemId==id)
-                          .Select(item => new ItemList
-                          {
-                              ItemId = item.ItemId,
-                              CategoryId = item.Category.CategoryId,
-                             
-                              SubCategoryId = item.subCategory.SubCategoryId,
-                              
-                              ItemName = item.ItemName,
-                              ItemDesc = item.ItemDesc,
-                              Price = item.Price,
-                              Discount = item.Discount
-                          }).ToList();
+                var ress = itemRepository.get(id);
 
-                if (ress == null || ress.Count <= 0)
+                if (ress == null)
                 {
                     return NoContent();
                 }
@@ -74,24 +62,35 @@ namespace ListOfItems.Controllers
                 }
                 else
                 {
-                    ItemList item = new ItemList
-                    {
-                        CategoryId = itemdata.CategoryId,
-                        SubCategoryId = itemdata.SubCategoryId,
-                        ItemName = itemdata.ItemName,
-                        ItemDesc = itemdata.ItemDesc,
-                        Price = itemdata.Price,
-                        Discount = itemdata.Discount
-                    };
-
-                    db.ItemMaster.Add(item);
-                    db.SaveChanges();
-                    return Ok();
+                    var result = itemRepository.Create(itemdata);
+                    return Ok(result);
                 }
             }
             catch(Exception e)
             {
                 return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                if (id == 0)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    var delete = itemRepository.Delete(id);
+                    return Ok(delete);
+
+                }
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

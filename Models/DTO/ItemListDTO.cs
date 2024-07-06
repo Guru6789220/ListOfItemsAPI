@@ -34,7 +34,7 @@ namespace ListOfItems.Models.DTO
         
         public string? SubCategoryName { get; set; }
 
-     
+        public string ? ErrorMsg { get; set; }
 
     }
 
