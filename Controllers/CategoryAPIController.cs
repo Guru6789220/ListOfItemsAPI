@@ -1,6 +1,7 @@
 ﻿using ListOfItems.DataAccess;
 using ListOfItems.Models;
 using ListOfItems.Models.DTO;
+using ListOfItems.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -13,37 +14,22 @@ namespace ListOfItems.Controllers
     [ApiController]
     public class CategoryAPIController : ControllerBase
     {
+        private readonly ICategoryRepository categoryRepository;
         private readonly DBConnect db;
-        public CategoryAPIController(DBConnect db)
+        public CategoryAPIController(ICategoryRepository categoryRepository, DBConnect db)
         {
+            this.categoryRepository = categoryRepository;
             this.db = db;
+
         }
 
         [HttpGet]
-        public ActionResult<CategoryDTO> GET(int flag)
+        public ActionResult<CategoryDTO> GET()
         {
             try
             {
-                var messageParam = new SqlParameter
-                {
-                    ParameterName = "@Message",
-                    SqlDbType = SqlDbType.NVarChar,
-                    Size = 4000,
-                    Direction = ParameterDirection.Output // This specifies it as an output parameter
-                };
-                var res = db.Category_Master.FromSql($"Usp_Category {flag},{0},{""},{""},{messageParam}").AsEnumerable().Select(c=>new CategoryDTO
-                {
-                    CategoryName= c.CategoryName,
-                    CategoryId= c.CategoryId,
-                    Avaliable=c.Avaliable
-                }).ToList();
-                //var res = db.Category_Master.Where(r=>r.Avaliable>0).Select(cm=>new CategoryDTO
-                //{
-                //    CategoryId=cm.CategoryId,
-                //    CategoryName=cm.CategoryName,
-                //    Avaliable=cm.Avaliable
-
-                //}).ToList();
+                var res=categoryRepository.Get();
+                
                 if (res == null || res.ToList().Count <= 0)
                 {
                     return NoContent();

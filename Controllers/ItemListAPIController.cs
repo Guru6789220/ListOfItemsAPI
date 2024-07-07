@@ -2,6 +2,7 @@
 using ListOfItems.Models;
 using ListOfItems.Models.DTO;
 using ListOfItems.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ namespace ListOfItems.Controllers
             itemRepository = ItemReop;
         }
         [HttpGet]
+        [Authorize(Policy ="CustomerOnly")]
         public async Task<List<ItemListDTO>> Get()
         {
             var res= await Task.FromResult(itemRepository.getall());
@@ -30,6 +32,7 @@ namespace ListOfItems.Controllers
         }
      
         [HttpGet("{id:int}")]
+        [Authorize(Policy = "CustomerOnly")]
         public ActionResult<ItemList> Get(int id)
         {
             try
@@ -52,6 +55,7 @@ namespace ListOfItems.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy ="SupplierOnly")]
         public ActionResult<ItemListDTO> Create([FromBody] ItemListDTO itemdata) 
         {
             try
@@ -73,6 +77,7 @@ namespace ListOfItems.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Policy ="SupplierOnly")]
         public IActionResult Delete(int id)
         {
             try
